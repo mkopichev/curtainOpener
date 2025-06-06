@@ -1,0 +1,7 @@
+{
+    "AVR.device.type": "atmega328p",
+    "AVR.device.frequency": 16000000,
+    "AVR.programmer.type": "arduino",
+    "AVR.programmer.port": "COM5",
+    "AVR.programmer.rate": 115200
+}
