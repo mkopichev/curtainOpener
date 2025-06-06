@@ -5,7 +5,6 @@
 #define F_CPU    16000000UL
 #define BAUD     9600
 #define UBRR_VAL (F_CPU / 16 / BAUD - 1)
-#define TEST 0.0
 
 // Глобальные переменные
 volatile int8_t phase_counter = 0;       // Счетчик текущей фазы двигателя
