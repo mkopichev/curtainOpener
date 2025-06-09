@@ -13,11 +13,11 @@ volatile int steps_remaining = 0;        // Оставшееся количес�
 volatile int step_count_constant = 1000; // Константа количества шагов (пример)
 volatile int motor_dir = 0;              // Направление вращения: 0 - CW, 1 - CCW
 
-// Переменные для управления кнопками и подсчёта шагов между нажатииями
+// Переменные для управления кнопками и подсчёта шагов между нажатиями
 volatile uint8_t motor_running = 0;               // Флаг работы мотора (1 - работает, 0 - не работает)
 volatile uint32_t steps_taken = 0;                // Количество шагов с запуска мотора
 volatile uint32_t last_steps_between_presses = 0; // Количество шагов между разными нажатиями кнопок
-volatile uint8_t last_button_pressed = 0;         // Номер последней нажатиой кнопки: 0 - нет, 4 - PD4, 5 - PD5
+volatile uint8_t last_button_pressed = 0;         // Номер последней нажатой кнопки: 0 - нет, 4 - PD4, 5 - PD5
 
 // Массив фаз для управления шаговым двигателем
 uint8_t phase[] = {0b0001, 0b0011, 0b0010, 0b0110, 0b0100, 0b1100, 0b1000, 0b1001};
@@ -92,8 +92,8 @@ ISR(PCINT2_vect) {
             steps_remaining = 0;
             PORTB = 0;
 
-            last_steps_between_presses = steps_taken;
-            last_button_pressed = 0;
+            last_steps_between_presses = steps_taken; // Сохраняем количество шагов
+            last_button_pressed = 0;                  // Сбрасываем нажатую кнопку
         }
         // Если нажата та же кнопка - ничего не делаем, мотор продолжает крутиться
     }
@@ -103,7 +103,7 @@ ISR(PCINT2_vect) {
 }
 
 int main(void) {
-    TCCR0B = (1 << CS02);
+    TCCR0B = (1 << CS00) | (1 << CS01);
     TIMSK0 = (1 << TOIE0);
 
     DDRB |= 0x0F;
@@ -127,11 +127,31 @@ int main(void) {
                 if(steps_to_move == 0)
                     steps_to_move = 1;
                 motor_state = command;
-                steps_remaining = steps_to_move;
+                steps_remaining = steps_to_move; // Устанавливаем количество шагов для выполнения
                 motor_running = 1;
                 steps_taken = 0;
 
-                last_steps_between_presses = 0;
+                // last_steps_between_presses не сбрасываем здесь
+            } else if(command == 3) {
+                // Команда 3 — сброс переменной last_steps_between_presses
+                last_steps_between_presses = 0; // Сбрасываем только при получении команды 3
+                motor_dir = 0;
+                motor_state = 3;
+                step_count_constant = 0;
+                motor_running = 1;
+                steps_taken = 0;
+            } else if(command == 0) {
+                // Команда остановки
+                motor_state = 0;
+                steps_remaining = 0;
+                motor_running = 0;
+                PORTB = 0;
+            } else {
+                // Для прочих команд — остановка
+                motor_state = 0;
+                steps_remaining = 0;
+                motor_running = 0;
+                PORTB = 0;
             }
         } else {
             int percent = uart_read_number();
@@ -157,6 +177,8 @@ int main(void) {
                 step_count_constant = 0;
                 motor_running = 1;
                 steps_taken = 0;
+
+                last_steps_between_presses = 0; // Сбрасываем переменную при запуске рандомного режима
             } else {
                 motor_state = 0;
                 steps_remaining = 0;
@@ -187,12 +209,10 @@ ISR(TIMER0_OVF_vect) {
 
             if(steps_remaining > 0)
                 steps_remaining--;
-            else if(steps_remaining < 0)
-                steps_remaining = -1; // бесконечное вращение
         } else {
             motor_state = 0;
             motor_running = 0;
-            PORTB = 0;
+            PORTB = 0; // Останавливаем мотор
         }
     } else if(motor_state == 3) {
         if((PIND & (1 << PD4)) || (PIND & (1 << PD5))) {
