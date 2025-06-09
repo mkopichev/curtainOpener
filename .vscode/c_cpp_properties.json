@@ -3,7 +3,7 @@
         {
             "name": "AVR",
             "intelliSenseMode": "${default}",
-            "compilerPath": "C:\\Users\\GET-5\\Programming\\avr-gcc-12.1.0-x86-windows\\bin\\avr-gcc.exe",
+            "compilerPath": "/usr/local/bin/avr-gcc",
             "cStandard": "${default}",
             "cppStandard": "${default}",
             "includePath": [],
@@ -20,6 +20,10 @@
                 "-pipe",
                 "-mmcu=atmega328p",
                 "-DF_CPU=16000000UL"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
             ]
         }
     ],
