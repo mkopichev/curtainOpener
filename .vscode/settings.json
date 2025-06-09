@@ -1,10 +1,13 @@
 {
-    "AVR.source.compiler": "/usr/local/bin/avr-gcc",
-    "AVR.programmer.tool": "/usr/local/bin/avrdude",
+    "AVR.source.compiler": "C:\\Users\\GET-5\\Programming\\avr-gcc-12.1.0-x86-windows\\bin\\avr-gcc.exe",
+    "AVR.programmer.tool": "C:\\Users\\GET-5\\Programming\\avr-gcc-12.1.0-x86-windows\\bin\\avrdude.exe",
     "AVR.source.libraries": [],
     "AVR.device.type": "atmega328p",
     "AVR.device.frequency": 16000000,
     "AVR.programmer.type": "arduino",
-    "AVR.programmer.port": "/dev/tty.usbserial-1420",
-    "AVR.programmer.rate": 115200
+    "AVR.programmer.port": "COM5",
+    "AVR.programmer.rate": 115200,
+    "AVR.reporter.arguments": [
+        "-A"
+    ]
 }
