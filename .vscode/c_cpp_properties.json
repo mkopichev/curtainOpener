@@ -3,7 +3,7 @@
         {
             "name": "AVR",
             "intelliSenseMode": "${default}",
-            "compilerPath": "/usr/local/bin/avr-gcc",
+            "compilerPath": "C:\\Users\\GET-5\\Programming\\avr-gcc-12.1.0-x86-windows\\bin\\avr-gcc.exe",
             "cStandard": "${default}",
             "cppStandard": "${default}",
             "includePath": [],
