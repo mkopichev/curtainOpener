@@ -5,7 +5,7 @@
     "AVR.device.type": "atmega328p",
     "AVR.device.frequency": 16000000,
     "AVR.programmer.type": "arduino",
-    "AVR.programmer.port": "/dev/tty.usbserial-1420",
+    "AVR.programmer.port": "/dev/tty.usbserial-1410",
     "AVR.programmer.rate": 115200,
     "AVR.reporter.arguments": [
         "-C"
